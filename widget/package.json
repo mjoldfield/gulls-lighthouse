@@ -1,0 +1,18 @@
+{
+  "name": "prob-demos",
+  "version": "1.0.0",
+  "description": "Purescript probability demos",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Oldfield",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
+}

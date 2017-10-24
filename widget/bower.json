@@ -1,0 +1,27 @@
+{
+  "name": "prob-demos",
+  "description": "Purescript probability demos",
+  "main": "index.js",
+  "authors": [
+    "Martin Oldfield"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-prelude": "^3.1.0",
+    "purescript-console": "^3.0.0",
+    "purescript-react": "^4.2.0",
+    "purescript-react-dom": "^4.0.0",
+    "purescript-random": "^3.0.0",
+    "purescript-canvas": "^3.1.0",
+    "purescript-safely": "^3.0.0"
+  }
+}

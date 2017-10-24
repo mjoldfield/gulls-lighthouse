@@ -1,0 +1,19 @@
+#GLHdCanvas { width: 80%; margin-left: 10%; }
+
+#GLHpostCanvas { width: 80%; margin-left: 10%;  margin-top: 5%; margin-bottom: 2.5%; }
+
+#GLHdata h2 { text-align: center; }
+
+#GLHbuttonBar button { border: none;
+		    font-size: 20px;
+		    display:    inline-block;
+		    text-align: center;
+		    margin-top: 5%;
+		    margin-bottom: 5%;
+		    margin-left: 20%;
+		    width: 20%;
+		    height: 40px;
+		  }
+#GLHbuttonFlash { background-color: #ff0; }
+#GLHbuttonReset { background-color: #0c0; }
+
