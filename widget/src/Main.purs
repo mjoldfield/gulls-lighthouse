@@ -5,13 +5,14 @@ import Control.Monad.Eff (Eff, foreachE)
 import Control.Monad.Eff.Console (CONSOLE)
 import Control.Monad.Eff.Random (RANDOM, randomRange)
 import Control.Monad.Except (runExcept)
+import Conditional (ifelse)
 import Data.Either (either)
 import Data.Foreign (readString, toForeign)
 import Data.Foreign.Index (index)
 import Data.Foldable (class Foldable, maximum, product, for_)
 import Data.Generic (class Generic, gShow)
 import Data.Int (hexadecimal, round, toNumber, toStringAs)
-import Data.Array ((:), (..))
+import Data.Array ((:), (..), null)
 import Data.Maybe (fromJust)
 import DOM (DOM())
 import DOM.HTML (window)
@@ -180,8 +181,12 @@ paintState canvasId posteriorId (AppState state) = do
 
                  let dx = 1.0 / toNumber ny
                  let dy = 1.0 / toNumber nx
-                 
-                 paintRects posteriorId dx dy postGrid (scalePost maxpost) heatCMap
+
+                 -- if we have no data, just clear the posterior rather than paint
+                 -- the natural colour i.e. yellow.
+                 ifelse (null state.theData)
+                        (clearPost posteriorId)
+                        (paintRects posteriorId dx dy postGrid (scalePost maxpost) heatCMap)
                           
                  paintTruth posteriorId state.truth
                  paintData canvasId state.theData
@@ -189,8 +194,11 @@ paintState canvasId posteriorId (AppState state) = do
           ny = 100
           width = 800.0 -- canvas with: will be scaled by browser
           dHeight = 50.0
-                    
 
+clearPost canvasId = void $ do
+                       canvas <- unsafeGetCanvas canvasId
+                       fillCanvas canvas "#000000"
+                    
 --
 -- Calculate fn at midpoints of nx x ny grid on [0,1] x [0,1]
 --
@@ -214,8 +222,6 @@ paintRects canvasId dx dy rects munge shader = void $ do
                  canvas <- unsafeGetCanvas canvasId
                  dims   <- getCanvasDimensions canvas
                                  
-                 fillCanvas canvas "#404040"       
-
                  ctx <- getContext2D canvas
 
                  let rectx = dims.width  * dx
@@ -387,3 +393,6 @@ clamp a b x | x < a     = a
 
 unsafeMaximum :: forall a f. Ord a => Foldable f => f a -> a
 unsafeMaximum = unsafePartial fromJust <<< maximum                          
+
+                
+                
