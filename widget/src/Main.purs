@@ -9,7 +9,7 @@ import Conditional (ifelse)
 import Data.Either (either)
 import Data.Foreign (readString, toForeign)
 import Data.Foreign.Index (index)
-import Data.Foldable (class Foldable, maximum, product, for_)
+import Data.Foldable (class Foldable, maximum, sum, for_)
 import Data.Generic (class Generic, gShow)
 import Data.Int (hexadecimal, round, toNumber, toStringAs)
 import Data.Array ((:), (..), null)
@@ -170,8 +170,8 @@ clearTheData (AppState as) = AppState $ as { theData = [] }
 paintState :: forall eff. String -> String -> AppState
                           -> Eff (canvas :: CANVAS | eff) Unit                    
 paintState canvasId posteriorId (AppState state) = do
-                 let postGrid = gridFn nx ny (post state.theData)
-                 let maxpost  = unsafeMaximum $ map (\r -> r.f) postGrid
+                 let logPostGrid = gridFn nx ny (logPost state.theData)
+                 let maxlogPost  = unsafeMaximum $ map (\r -> r.f) logPostGrid
 
                  dcanvas <- unsafeGetCanvas canvasId
                  void $ setCanvasDimensions { height: dHeight, width: width } dcanvas
@@ -186,7 +186,7 @@ paintState canvasId posteriorId (AppState state) = do
                  -- the natural colour i.e. yellow.
                  ifelse (null state.theData)
                         (clearPost posteriorId)
-                        (paintRects posteriorId dx dy postGrid (scalePost maxpost) heatCMap)
+                        (paintRects posteriorId dx dy logPostGrid (scaleLogPost maxlogPost) heatCMap)
                           
                  paintTruth posteriorId state.truth
                  paintData canvasId state.theData
@@ -243,14 +243,14 @@ paintRects canvasId dx dy rects munge shader = void $ do
 -- These calculate posterior, scaled so that 1.0 is MAP and
 -- 0.0 is prob = 0
 --
-scalePost :: Number -> Number -> Number
-scalePost m x = x / m
+scaleLogPost :: Number -> Number -> Number
+scaleLogPost m x = Math.exp $ x - m
                                   
-post :: Array Datum -> Number -> Number -> Number
-post theData x y = product $ map (\d -> postDatum d x y) theData
+logPost :: Array Datum -> Number -> Number -> Number
+logPost theData x y = sum $ map (\d -> logPostDatum d x y) theData
 
-postDatum :: Datum -> Number -> Number -> Number
-postDatum (Datum s) x y = y / (y * y + dx * dx)
+logPostDatum :: Datum -> Number -> Number -> Number
+logPostDatum (Datum s) x y = Math.log $ y / (y * y + dx * dx)
    where dx = x - s.location
 
 --
