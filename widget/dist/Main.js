@@ -24599,7 +24599,7 @@ var PS = {};
               if (Data_Boolean.otherwise) {
                   return x;
               };
-              throw new Error("Failed pattern match at Main line 389, column 1 - line 389, column 46: " + [ a.constructor.name, b.constructor.name, x.constructor.name ]);
+              throw new Error("Failed pattern match at Main line 390, column 1 - line 390, column 46: " + [ a.constructor.name, b.constructor.name, x.constructor.name ]);
           };
       };
   };
@@ -24672,7 +24672,7 @@ var PS = {};
       if (Data_Boolean.otherwise) {
           return Data_Int.toStringAs(Data_Int.hexadecimal)(i);
       };
-      throw new Error("Failed pattern match at Main line 370, column 1 - line 370, column 26: " + [ i.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 371, column 1 - line 371, column 26: " + [ i.constructor.name ]);
   };
   var asHex = function (x) {
       return asHexInt(Data_Int.round(clamp(0.0)(1.0)(x) * 255.0));

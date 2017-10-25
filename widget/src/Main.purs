@@ -195,6 +195,7 @@ paintState canvasId posteriorId (AppState state) = do
           width = 800.0 -- canvas with: will be scaled by browser
           dHeight = 50.0
 
+clearPost :: forall eff. String -> Eff (canvas :: CANVAS | eff) Unit                    
 clearPost canvasId = void $ do
                        canvas <- unsafeGetCanvas canvasId
                        fillCanvas canvas "#000000"
