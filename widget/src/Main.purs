@@ -172,6 +172,8 @@ paintState :: forall eff. String -> String -> AppState
 paintState canvasId posteriorId (AppState state) = do
                  let logPostGrid = gridFn nx ny (logPost state.theData)
                  let maxlogPost  = unsafeMaximum $ map (\r -> r.f) logPostGrid
+                 let postGrid    = mapGrid (scaleLogPost maxlogPost) logPostGrid
+                 
 
                  dcanvas <- unsafeGetCanvas canvasId
                  void $ setCanvasDimensions { height: dHeight, width: width } dcanvas
@@ -186,7 +188,7 @@ paintState canvasId posteriorId (AppState state) = do
                  -- the natural colour i.e. yellow.
                  ifelse (null state.theData)
                         (clearPost posteriorId)
-                        (paintRects posteriorId dx dy logPostGrid (scaleLogPost maxlogPost) heatCMap)
+                        (paintRects posteriorId dx dy postGrid heatCMap)
                           
                  paintTruth posteriorId state.truth
                  paintData canvasId state.theData
@@ -216,10 +218,9 @@ paintRects :: forall eff.
                 String
                 -> Number -> Number 
                 -> Array { x :: Number, y :: Number, f :: Number }
-                -> (Number -> Number)
                 -> (Number -> { r :: Number, g :: Number, b :: Number })
                 -> Eff (canvas :: CANVAS | eff) Unit                    
-paintRects canvasId dx dy rects munge shader = void $ do
+paintRects canvasId dx dy rects shader = void $ do
                  canvas <- unsafeGetCanvas canvasId
                  dims   <- getCanvasDimensions canvas
                                  
@@ -233,8 +234,7 @@ paintRects canvasId dx dy rects munge shader = void $ do
                      let xr  = x         * dims.width  - 0.5 * rectx
                      let yr  = (1.0 - y) * dims.height - 0.5 * recty
 
-                     let u   = munge f
-                     let rgb = shader u
+                     let rgb = shader f
 
                      _ <- setFillStyle (calcStyleRGB rgb) ctx
                      void $ fillRect ctx { x: xr,  y: yr, h: recty, w: rectx }
@@ -253,7 +253,15 @@ logPost theData x y = sum $ map (\d -> logPostDatum d x y) theData
 logPostDatum :: Datum -> Number -> Number -> Number
 logPostDatum (Datum s) x y = Math.log $ y / (y * y + dx * dx)
    where dx = x - s.location
+              
+mapGrid :: (Number -> Number)
+             -> Array { x :: Number, y :: Number, f :: Number }
+             -> Array { x :: Number, y :: Number, f :: Number }
+mapGrid g = map g'
+   where g' { x: x, y: y, f: f } = { x: x, y: y, f: g f }
 
+
+              
 --
 -- application code follows
 --

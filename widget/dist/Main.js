@@ -24257,8 +24257,8 @@ var PS = {};
   };
   var unsafeMaximum = function (dictOrd) {
       return function (dictFoldable) {
-          return function ($170) {
-              return Data_Maybe.fromJust()(Data_Foldable.maximum(dictOrd)(dictFoldable)($170));
+          return function ($175) {
+              return Data_Maybe.fromJust()(Data_Foldable.maximum(dictOrd)(dictFoldable)($175));
           };
       };
   };
@@ -24312,6 +24312,16 @@ var PS = {};
       var theta1 = 0.5 * $$Math.pi;
       var theta0 = -0.5 * $$Math.pi;
       return Control_Apply.apply(Control_Monad_Eff.applyEff)(Data_Functor.map(Control_Monad_Eff.functorEff)(newDatumAngle(v))(Control_Monad_Eff_Random.randomRange(theta0)(theta1)))(Control_Monad_Eff_Random.randomRange(-1.0)(1.0));
+  };
+  var mapGrid = function (g) {
+      var g$prime = function (v) {
+          return {
+              x: v.x, 
+              y: v.y, 
+              f: g(v.f)
+          };
+      };
+      return Data_Functor.map(Data_Functor.functorArray)(g$prime);
   };
   var logPostDatum = function (v) {
       return function (x) {
@@ -24571,14 +24581,14 @@ var PS = {};
   };
   var clearTheData = function (v) {
       return AppState((function () {
-          var $120 = {};
-          for (var $121 in v) {
-              if ({}.hasOwnProperty.call(v, $121)) {
-                  $120[$121] = v[$121];
+          var $125 = {};
+          for (var $126 in v) {
+              if ({}.hasOwnProperty.call(v, $126)) {
+                  $125[$126] = v[$126];
               };
           };
-          $120.theData = [  ];
-          return $120;
+          $125.theData = [  ];
+          return $125;
       })());
   };
   var clearPost = function (canvasId) {
@@ -24599,7 +24609,7 @@ var PS = {};
               if (Data_Boolean.otherwise) {
                   return x;
               };
-              throw new Error("Failed pattern match at Main line 390, column 1 - line 390, column 46: " + [ a.constructor.name, b.constructor.name, x.constructor.name ]);
+              throw new Error("Failed pattern match at Main line 398, column 1 - line 398, column 46: " + [ a.constructor.name, b.constructor.name, x.constructor.name ]);
           };
       };
   };
@@ -24626,8 +24636,8 @@ var PS = {};
                   var x = v3.location * v1.width;
                   var x$prime = clamp(5.0)(v1.width - 5.0)(x);
                   var colour = (function () {
-                      var $136 = x$prime === x;
-                      if ($136) {
+                      var $141 = x$prime === x;
+                      if ($141) {
                           return "#ffff00";
                       };
                       return "#ff0000";
@@ -24672,7 +24682,7 @@ var PS = {};
       if (Data_Boolean.otherwise) {
           return Data_Int.toStringAs(Data_Int.hexadecimal)(i);
       };
-      throw new Error("Failed pattern match at Main line 371, column 1 - line 371, column 26: " + [ i.constructor.name ]);
+      throw new Error("Failed pattern match at Main line 379, column 1 - line 379, column 26: " + [ i.constructor.name ]);
   };
   var asHex = function (x) {
       return asHexInt(Data_Int.round(clamp(0.0)(1.0)(x) * 255.0));
@@ -24684,31 +24694,28 @@ var PS = {};
       return function (dx) {
           return function (dy) {
               return function (rects) {
-                  return function (munge) {
-                      return function (shader) {
-                          return Data_Functor["void"](Control_Monad_Eff.functorEff)(function __do() {
-                              var v = unsafeGetCanvas(canvasId)();
-                              var v1 = Graphics_Canvas.getCanvasDimensions(v)();
-                              var v2 = Graphics_Canvas.getContext2D(v)();
-                              var rectx = v1.width * dx;
-                              var recty = v1.height * dy;
-                              return Control_Monad_Eff.foreachE(rects)(function (v3) {
-                                  var xr = v3.x * v1.width - 0.5 * rectx;
-                                  var yr = (1.0 - v3.y) * v1.height - 0.5 * recty;
-                                  var u = munge(v3.f);
-                                  var rgb = shader(u);
-                                  return function __do() {
-                                      var v4 = Graphics_Canvas.setFillStyle(calcStyleRGB(rgb))(v2)();
-                                      return Data_Functor["void"](Control_Monad_Eff.functorEff)(Graphics_Canvas.fillRect(v2)({
-                                          x: xr, 
-                                          y: yr, 
-                                          h: recty, 
-                                          w: rectx
-                                      }))();
-                                  };
-                              })();
-                          });
-                      };
+                  return function (shader) {
+                      return Data_Functor["void"](Control_Monad_Eff.functorEff)(function __do() {
+                          var v = unsafeGetCanvas(canvasId)();
+                          var v1 = Graphics_Canvas.getCanvasDimensions(v)();
+                          var v2 = Graphics_Canvas.getContext2D(v)();
+                          var rectx = v1.width * dx;
+                          var recty = v1.height * dy;
+                          return Control_Monad_Eff.foreachE(rects)(function (v3) {
+                              var xr = v3.x * v1.width - 0.5 * rectx;
+                              var yr = (1.0 - v3.y) * v1.height - 0.5 * recty;
+                              var rgb = shader(v3.f);
+                              return function __do() {
+                                  var v4 = Graphics_Canvas.setFillStyle(calcStyleRGB(rgb))(v2)();
+                                  return Data_Functor["void"](Control_Monad_Eff.functorEff)(Graphics_Canvas.fillRect(v2)({
+                                      x: xr, 
+                                      y: yr, 
+                                      h: recty, 
+                                      w: rectx
+                                  }))();
+                              };
+                          })();
+                      });
                   };
               };
           };
@@ -24721,6 +24728,7 @@ var PS = {};
               var maxlogPost = unsafeMaximum(Data_Ord.ordNumber)(Data_Foldable.foldableArray)(Data_Functor.map(Data_Functor.functorArray)(function (r) {
                   return r.f;
               })(logPostGrid));
+              var postGrid = mapGrid(scaleLogPost(maxlogPost))(logPostGrid);
               return function __do() {
                   var v1 = unsafeGetCanvas(canvasId)();
                   Data_Functor["void"](Control_Monad_Eff.functorEff)(Graphics_Canvas.setCanvasDimensions({
@@ -24734,7 +24742,7 @@ var PS = {};
                   })(v2))();
                   var dx = 1.0 / Data_Int.toNumber(100);
                   var dy = 1.0 / Data_Int.toNumber(100);
-                  Conditional.ifelse(Data_Array["null"](v.theData))(clearPost(posteriorId))(paintRects(posteriorId)(dx)(dy)(logPostGrid)(scaleLogPost(maxlogPost))(heatCMap))();
+                  Conditional.ifelse(Data_Array["null"](v.theData))(clearPost(posteriorId))(paintRects(posteriorId)(dx)(dy)(postGrid)(heatCMap))();
                   paintTruth(posteriorId)(v.truth)();
                   return paintData(canvasId)(v.theData)();
               };
@@ -24744,14 +24752,14 @@ var PS = {};
   var addDatum = function (v) {
       return function (s) {
           return AppState((function () {
-              var $162 = {};
-              for (var $163 in v) {
-                  if ({}.hasOwnProperty.call(v, $163)) {
-                      $162[$163] = v[$163];
+              var $167 = {};
+              for (var $168 in v) {
+                  if ({}.hasOwnProperty.call(v, $168)) {
+                      $167[$168] = v[$168];
                   };
               };
-              $162.theData = Data_Array.cons(s)(v.theData);
-              return $162;
+              $167.theData = Data_Array.cons(s)(v.theData);
+              return $167;
           })());
       };
   };
@@ -24773,23 +24781,23 @@ var PS = {};
       };
       var dSpec = (function () {
           var v = React.spec(initialState)(rend);
-          var $167 = {};
-          for (var $168 in v) {
-              if ({}.hasOwnProperty.call(v, $168)) {
-                  $167[$168] = v[$168];
+          var $172 = {};
+          for (var $173 in v) {
+              if ({}.hasOwnProperty.call(v, $173)) {
+                  $172[$173] = v[$173];
               };
           };
-          $167.componentDidUpdate = function (ctx) {
+          $172.componentDidUpdate = function (ctx) {
               return function (v1) {
                   return function (v2) {
                       return Control_Bind.bind(Control_Monad_Eff.bindEff)(React.readState(ctx))(paintState("GLHdCanvas")("GLHpostCanvas"));
                   };
               };
           };
-          $167.componentDidMount = function (ctx) {
+          $172.componentDidMount = function (ctx) {
               return Control_Bind.bind(Control_Monad_Eff.bindEff)(React.readState(ctx))(paintState("GLHdCanvas")("GLHpostCanvas"));
           };
-          return $167;
+          return $172;
       })();
       return React.createClass(dSpec);
   })();
@@ -24818,6 +24826,7 @@ var PS = {};
   exports["logPost"] = logPost;
   exports["logPostDatum"] = logPostDatum;
   exports["main"] = main;
+  exports["mapGrid"] = mapGrid;
   exports["newDatum"] = newDatum;
   exports["newDatumAngle"] = newDatumAngle;
   exports["newRandomState"] = newRandomState;
