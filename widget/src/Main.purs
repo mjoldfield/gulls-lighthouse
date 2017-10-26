@@ -173,7 +173,6 @@ paintState canvasId posteriorId (AppState state) = do
                  let logPostGrid = gridFn nx ny (logPost state.theData)
                  let maxlogPost  = unsafeMaximum $ map (\r -> r.f) logPostGrid
                  let postGrid    = mapGrid (scaleLogPost maxlogPost) logPostGrid
-                 
 
                  dcanvas <- unsafeGetCanvas canvasId
                  void $ setCanvasDimensions { height: dHeight, width: width } dcanvas
@@ -238,8 +237,6 @@ paintRects canvasId dx dy rects shader = void $ do
 
                      _ <- setFillStyle (calcStyleRGB rgb) ctx
                      void $ fillRect ctx { x: xr,  y: yr, h: recty, w: rectx }
-                   
-                                  
 --
 -- These calculate posterior, scaled so that 1.0 is MAP and
 -- 0.0 is prob = 0

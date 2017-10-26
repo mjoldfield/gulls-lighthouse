@@ -1,18 +1,23 @@
 {
-  "name": "prob-demos",
-  "version": "1.0.0",
-  "description": "Purescript probability demos",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Martin Oldfield",
-  "license": "ISC",
-  "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "name": "gulls-lighthouse",
+    "version": "1.0.0",
+    "description": "Purescript probability demos",
+    "homepage":   "https://mjoldfield.com/atelier/atelier-dest/2017/10/gulls-lighthouse.html",
+    "repository" : {
+	"type" : "git",
+	"url": "https://github.com/mjoldfield/gulls-lighthouse"
+    }, 
+    "main": "index.js",
+    "directories": {
+	"test": "test"
+    },
+    "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Martin Oldfield",
+    "license": "GPL-2.0",
+    "dependencies": {
+	"react": "^15.6.1",
+	"react-dom": "^15.6.1"
   }
 }
