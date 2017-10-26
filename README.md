@@ -12,10 +12,10 @@ need to install to run the code. There’s a [Getting Started Guide](https://git
 Given the PureScript toolchain, you can compile my source to JavaScript
 and then execute it thus:
 
-   $ npm install
-   $ bower install
-   $ pulp browserfy -O to dist/Main.js
-   $ open html/index.html
+    $ npm install
+    $ bower install
+    $ pulp browserfy -O to dist/Main.js
+    $ open html/index.html
 
 ## Histograms
 
